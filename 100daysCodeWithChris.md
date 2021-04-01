@@ -182,3 +182,35 @@ Color.white
 ```
 
 So far so good. On to Lesson 5
+
+# Day 3 Continued ...
+
+* Mar 25, 2021
+* 14 Day Beginner Challenge
+
+## Lesson 8 Structures
+
+Good review of terminology.  Wonder where modifiers fit in this.
+
+* Structure
+   * properties = variables
+   * methods = functions
+
+I had not heard of `computed properties` yet.  It looks like an enclosure.
+
+# Day 4
+
+* Mar 26, 2021
+* 14 Day Beginner Challenge
+
+## Lesson 9 Instances
+
+Course covered the concept of an instance and covered how structs are used within the SwiftUI App
+
+Also discovered that in the CWC+ courses module 1 is the same as the 14 Day Beginner Challenge. Oops.  I could have just started with Module 1. Oh well.
+
+**Question:** Can extend the contenView.swift and add contentViews in a separate file so that the original file doesn't get too long.
+
+## Lesson 10 Buttons
+
+It was nice discussion of Buttons with and without trailing enclosures, text vs images.
