@@ -214,3 +214,32 @@ Also discovered that in the CWC+ courses module 1 is the same as the 14 Day Begi
 ## Lesson 10 Buttons
 
 It was nice discussion of Buttons with and without trailing enclosures, text vs images.
+
+
+# Day 5
+
+* Mar 27, 2021
+* 14 Day Beginner Challenge/Module 1
+
+# Module1:Lesson 11 State Properties
+
+State properties seem great.  It is a simplification of coding compared to UIKit.  I went ahead and created a function named `draw()` and put all the commands that occur during the button press into that function. and placed it just below the `@State` declarations.  It works great and keeps the viewController code clean.
+
+# Module 1: Lesson 12 If/else Statements
+
+This was a review for me as they are common in all programming languages. Though I had forgotten how to make random integers so that was nice.
+
+```Int.random(in: 1...100)```  That third `.` always seems to trip me up.
+
+
+ I was hesitant to do the challenge because I thought it was going to be too easy so it felt dumb.  I did it anyway.  I wanted to see if it I really could do it as quickly as I thought I could.  It was good practice and I spent some extra time finding the SF symbols so I could use some of those as buttons.
+
+I had originally thought I would use `arrow.up` and `arrow.down` but ultimately decided on `heart` and `heart.fill`.
+
+You can download the SF Symbols app that makes it really easy to download from here
+* [SF Symbols App](https://developer.apple.com/design/resources/)
+
+
+![Screen Shot 2021-03-27 at 10.18.40 AM|259x500](https://codecrew.codewithchris.com/uploads/default/original/2X/b/b1d690287c089107964d9dfc6cf7c97b187fa48c.png) 
+
+Looks like there is a bonus challenge in the 14 Day Beginner Challenge.  That is all I have left before proceeding to Module 2 in IOSfoundations.
