@@ -115,3 +115,70 @@ Color.white
 ```
 
 So far so good. On to Lesson 5
+
+
+# Day 2
+
+* Lesson 4 and challenge
+* Mar 24, 2021
+
+As I expected, @Chris2 does say to make new lines for the modifiers in the project.  I mentioned before that this is my first exposure to SwiftUI and I find this method of
+
+```modifier.modifier.modier ```
+
+To be very similar to Unix command line where we pipe commands from one thing to the next.
+
+```ls -lha | awk '{print $NF}' | xargs -I xx echo xx```  
+
+I will have to see how well that analogy holds up but if it does then I am going to really enjoy coding in swiftUI.
+
+## Notes from Lesson 4
+
+I have decided to use this forum to take notes as I progress.  I will avoid posting any answers to challenges but will include the modifiers I found useful from the lesson.   I made the challenge much more complicated because I didn't take notes from the lesson and didn't use what he taught. :(
+
+### Objects
+
+* Text("text")
+* Image("name")
+
+As of now we can only call images that are in the assets folder of the project, at some point I will want to know how to display it from the phone or the photo's library.
+
+### Stacks
+
+This is how we are organizing content in swiftUI,  Stacks have parameters that can be used to specify alignment and other properties (I haven't looked them up yet), for now I just want to remember that those properties may be easier to accomplish a look than a modifier.
+
+| Stack | Description|
+| -- | -- |
+|VStack| Vertical stack of Objects|
+|HStack | Horizontal Stack of Objects|
+|ZStack| Perpendicular Stack of Objects |
+
+
+### Modifiers
+
+These can be applied to Objects or Stacks.
+
+| Modifier | Description| Other |
+| -- | -- | -- |
+|.resizable()|Allow resizing| |
+|.aspectRatio()|Keep Width and Height Fixed |.fit |
+|.cornerRadius()|Modify object corners| |
+|.font()| Modify the font size/type| .caption, .largeTitle|
+|.padding()| White space around object|.trailing, leading, .top, .bottom|
+|.opacity()|Make an object more see through |
+|.background()| Can change the color of the background| |
+| .foregroundColor()| Change the color of the foreground text/object| |
+|.scaleEffect()| You can increase or decrease the size of the Object|
+|.frame() | Add a frame around an object| |
+
+FYI: the last two were modifiers I found trying to complete the challenge the hard way. :)
+
+
+#### Colors
+You can probably just name any color after the `Color.` and use it.  There will likely also be a way to include Hex colors. Wonder if I could extend Color to allow that.  That might be fun.
+
+```
+Color.white
+```
+
+So far so good. On to Lesson 5
