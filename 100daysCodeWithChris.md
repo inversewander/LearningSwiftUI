@@ -240,6 +240,19 @@ You can download the SF Symbols app that makes it really easy to download from h
 * [SF Symbols App](https://developer.apple.com/design/resources/)
 
 
-![Screen Shot 2021-03-27 at 10.18.40 AM|259x500](https://codecrew.codewithchris.com/uploads/default/original/2X/b/b1d690287c089107964d9dfc6cf7c97b187fa48c.png) 
+![Screen Shot 2021-03-27 at 10.18.40 AM|259x500](https://codecrew.codewithchris.com/uploads/default/original/2X/b/b1d690287c089107964d9dfc6cf7c97b187fa48c.png)
 
 Looks like there is a bonus challenge in the 14 Day Beginner Challenge.  That is all I have left before proceeding to Module 2 in IOSfoundations.
+
+# iOS Foundations: Module 1 Completed!  Day 5 continued ...
+
+* Mar 27, 2021
+* 14 Day Beginner Challenge/Module 1
+
+I just finished the slots game.  I was able to do it relatively quickly.  I used an array for the images even though we haven't learned it yet in this course.  I am really liking swiftUI for interface building. I am curious to see how more complicated apps with multiple viewControllers.
+
+I added an if statement to keep the the player from going into negative credits.  It prints an "out of money" because I didn't look up how to form the alert object.   I might add that later.
+
+Now on to iOS foundations Module 2 Recipe App.
+
+![Screen Shot 2021-03-27 at 6.20.15 PM|247x500](https://codecrew.codewithchris.com/uploads/default/original/2X/9/9d0d1360a79c8460689a633f2e0a812d9b48cbd3.png)
