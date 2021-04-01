@@ -256,3 +256,47 @@ I added an if statement to keep the the player from going into negative credits.
 Now on to iOS foundations Module 2 Recipe App.
 
 ![Screen Shot 2021-03-27 at 6.20.15 PM|247x500](https://codecrew.codewithchris.com/uploads/default/original/2X/9/9d0d1360a79c8460689a633f2e0a812d9b48cbd3.png)
+
+# Day 6 M2:L1,L2
+
+* Mar 28, 2021
+
+## iOS Foundations: Module 2: Lesson 1 and 2
+## Lesson 1 Overview
+## Lesson 2 Arrays  
+This was a good review of the possible arrays features.
+
+## Lesson 2 Challenge
+
+Not a bad challenge.  I would have liked to have displayed a card that was being drawn but realized that the assets we were provided doesn't include the full deck!  
+
+**Question:**  Does anyone know if there are any playing card images that are free to use in our apps? Perhaps when we get to drawing shapes we can create them from scratch.
+
+* Equatable was useful in the struct
+* Enum for the suits
+   * CaseIterable allows for getting a random case from the enum
+      * `suit.allCases.randomElement()!)`
+
+I realize we haven't learned enums yet but I had learned this before and it seemed like a logical place to put one but I had always struggled with the best way to use them.  Being able to grab a random element of an enum opens up lots of possibilities.
+
+My code preference is to create functions for the button actions.  I think it looks cleaner.  These functions however, I think need to be inside the struct.  I will have to look into extensions again to see how or if it makes sense to have a separate file as the projects get more complicated for these types of functions. I suppose I could create a button class and call the functions as methods of the class.
+
+```
+        VStack {
+            Text(text2Display)
+                .padding()
+            HStack{
+                Spacer()
+                Button(action: {create()}, label: {
+                    Text("Create")
+                })
+                Spacer()
+                Button(action: {draw()}, label: {
+                    Text("Draw")
+                })
+                Spacer()
+            }
+        }
+```
+
+![Screen Shot 2021-03-28 at 10.03.26 AM|230x500](https://codecrew.codewithchris.com/uploads/default/original/2X/4/4c12dacad58f68ed2c8751afe7cee2df78dc7911.png)
