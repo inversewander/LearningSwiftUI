@@ -380,3 +380,11 @@ Start with Struct then use class if needed.
 
 ## View
  * UI that the user sees
+
+
+ # Day 9 iOS Foundations M2 L7 Challenge
+
+ Great review of what we learned in lesson 7.  I keep feeling guilty for not being able to do it from scratch without looking for help from what was either covered in the lesson or online.  I suspect this is normal but not healthy.   From now on: **Use the tools at my disposal** .   Google is my best friend and has been for years!
+
+ Also found a great new podcast: https://anchor.fm/sistercodes/episodes/S2-Episode-11-Mobile-Development-with-Mikaela-Caron-et1411 <- @mikaelacaron
+ Follow her on twitter here -> [@mikaela_caron](https://twitter.com/mikaela__caron)
