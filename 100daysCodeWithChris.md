@@ -300,3 +300,30 @@ My code preference is to create functions for the button actions.  I think it lo
 ```
 
 ![Screen Shot 2021-03-28 at 10.03.26 AM|230x500](https://codecrew.codewithchris.com/uploads/default/original/2X/4/4c12dacad58f68ed2c8751afe7cee2df78dc7911.png)
+
+
+# Day 7 M2: L3
+
+This content is all new to me, but he introduces it pretty slowly.  
+
+* NavigationView
+* NavigationLink
+
+```
+ NavigationView {
+            List(array, id: \.self) { arrayElement in
+                NavigationLink(
+                    destination: Text("Destination"),
+
+                    label: {
+                        Text(arrayElement)
+                    })
+
+            }.navigationTitle(Text("My List"))
+```
+
+## M2:L3 Challenge
+
+This was a straight forward application of what we learned. Mostly cut and paste from the L3 project he showed us how to do.
+
+Question: Is it possible to have the background of the Elements change color if the elements are color names?
