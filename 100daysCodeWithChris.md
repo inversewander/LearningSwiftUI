@@ -327,3 +327,56 @@ This content is all new to me, but he introduces it pretty slowly.
 This was a straight forward application of what we learned. Mostly cut and paste from the L3 project he showed us how to do.
 
 Question: Is it possible to have the background of the Elements change color if the elements are color names?
+
+
+# Day 8 IOS Foundation M2: L4
+
+## Loops
+* for
+* for-in
+* while
+* repeat-while
+
+Straight forward application in the challenge.  started by copying the code from the previous challenge and modifying accordingly.
+
+I need to start an Array extension file on github to make my array manipulations easier.
+
+# Day 8 iOS Foundation M2:  L5
+
+## Classes
+
+* super
+* subclass
+* protocol
+
+Great little exercise to review classes.  Good to see the super used in the solution, I  haven't used that much yet in classes that I have made.  I used a switch which I am getting a better handle on how to use.
+
+# Day 8 iOS Foundation M2:  L6
+
+## Structs vs Classes
+
+### Structs (value type)
+* more lightweight
+* better for read only
+* swiftUI views
+
+### Classes (reference type)
+* better for read write
+* modifying a single instance
+
+Start with Struct then use class if needed.
+
+# Day 8 iOS Foundation M2:  L7 MVVM
+
+## Model
+* structs and classes that represent data
+   * recipes
+   * Shape of the data
+
+## View Model
+ * manages state and data user sees
+ * use class
+ * actual data
+
+## View
+ * UI that the user sees
