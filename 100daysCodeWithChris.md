@@ -24,8 +24,10 @@ I will post more on this with code as I explore it.  Right now I am just getting
 Decided to start with the Beginner challenge.  My initial foray into swift was using UIKit as swiftUI was still fairly new a year ago and most of the tutorials and solutions you can find online were for UIKit and old versions of swift.  So I am exploring the Beginner's challenge to learn swiftUI fundamentals.
 
 #### Lesson's 1 and 2
-The first few lessons are about Apple development and Xcode, which I was mostly already familiar with.  
+The first few lessons are about Apple development and Xcode, which I was mostly already familiar with.
+
 #### Lesson 3
+
 The third lesson is a remake of the classic "Hello, world" coding problem.  What I found really interesting here is the `command` click of a method to show the swiftUI inspector.  If you are new to swift you will not realize just how powerful a feature this is!  To be able to look at all of the possible ways you can modify the object in a fairly organized manner.  This is a huge advancement over UIKit coding where you are basically at the whim of the apple documentation.
 
 I am anticipating that how you organize your methods will be really important for readability.
@@ -35,6 +37,7 @@ Consider making the following
 ![image|131x75](https://codecrew.codewithchris.com/uploads/default/original/2X/5/54d40e687533bc30c607bb4288186725f3da47ea.png)
 
 * This is much harder to read
+
 ```
             Text("Hello, World").padding().background(Color.green).padding().background(Color.yellow)
 ```
@@ -55,13 +58,15 @@ I will be interested to see what @Chris2 recommends to code formatting in later 
 * Lesson 4 and challenge
 * Mar 24, 2021
 
-As I expected, @Chris2 does say to make new lines for the modifiers in the project.  I mentioned before that this is my first exposure to SwiftUI and I find this method of
+As I expected, Chris2 does say to make new lines for the modifiers in the project.  I mentioned before that this is my first exposure to SwiftUI and I find this method of
 
-```modifier.modifier.modier ```
+```
+modifier.modifier.modier
+```
 
 To be very similar to Unix command line where we pipe commands from one thing to the next.
 
-```ls -lha | awk '{print $NF}' | xargs -I xx echo xx```  
+`ls -lha | awk '{print $NF}' | xargs -I xx echo xx`
 
 I will have to see how well that analogy holds up but if it does then I am going to really enjoy coding in swiftUI.
 
@@ -124,11 +129,13 @@ So far so good. On to Lesson 5
 
 As I expected, @Chris2 does say to make new lines for the modifiers in the project.  I mentioned before that this is my first exposure to SwiftUI and I find this method of
 
-```modifier.modifier.modier ```
+modifier.modifier.modier`
 
 To be very similar to Unix command line where we pipe commands from one thing to the next.
 
-```ls -lha | awk '{print $NF}' | xargs -I xx echo xx```  
+```
+ls -lha | awk '{print $NF}' | xargs -I xx echo xx
+```  
 
 I will have to see how well that analogy holds up but if it does then I am going to really enjoy coding in swiftUI.
 
@@ -229,7 +236,7 @@ State properties seem great.  It is a simplification of coding compared to UIKit
 
 This was a review for me as they are common in all programming languages. Though I had forgotten how to make random integers so that was nice.
 
-```Int.random(in: 1...100)```  That third `.` always seems to trip me up.
+`Int.random(in: 1...100)`  That third `.` always seems to trip me up.
 
 
  I was hesitant to do the challenge because I thought it was going to be too easy so it felt dumb.  I did it anyway.  I wanted to see if it I really could do it as quickly as I thought I could.  It was good practice and I spent some extra time finding the SF symbols so I could use some of those as buttons.
@@ -388,3 +395,21 @@ Start with Struct then use class if needed.
 
  Also found a great new podcast: https://anchor.fm/sistercodes/episodes/S2-Episode-11-Mobile-Development-with-Mikaela-Caron-et1411 <- @mikaelacaron
  Follow her on twitter here -> [@mikaela_caron](https://twitter.com/mikaela__caron)
+
+
+# Day 10 iOS Foundations M2 L8/Challenge
+
+We learned
+| | Where | description|
+| -- | -- |-- |
+| @ObservedObject|  View | listening to said Object |
+| @ObservableObject|  ViewModel| makes object listenable |
+| @Published | ViewModel | Object to update |
+
+#### Challenge
+
+Since the @Published variable is what is changing in the view, we want to make changes in the viewModel rather than inside the button.  Not sure what how Chris was expecting us to try to change the first topping (topping1) since it is inside of the array and that array changed everytime you added a new pizza.
+
+Actually, as long as I refer to the model.array.topping1 I can still get it to change correctly even within the button function.  
+
+I am kind of confused as to what Chris wanted us to do with this part `When this button is tapped, change the "topping1" property of each pizza instance in the ViewModel to "Pineapple".` Other than the correct solution, I am not seeing the way that wouldn't work. It would be nice if this was shown in the answer commented out with `// some code <- this doesn't work`
