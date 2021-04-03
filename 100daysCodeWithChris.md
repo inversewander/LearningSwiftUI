@@ -1,5 +1,7 @@
 # 100 days Code with Chris
 
+This is my journal and experience with [Code with Chris](https://codecrew.codewithchris.com/).  Bear in mind I have had about a year of me exploring swift using UIKit on and off.  I am switching over to swiftUI and decided to do a review from the beginning.
+
 # Day 1
 
 ## Background
@@ -413,3 +415,53 @@ Since the @Published variable is what is changing in the view, we want to make c
 Actually, as long as I refer to the model.array.topping1 I can still get it to change correctly even within the button function.  
 
 I am kind of confused as to what Chris wanted us to do with this part `When this button is tapped, change the "topping1" property of each pizza instance in the ViewModel to "Pineapple".` Other than the correct solution, I am not seeing the way that wouldn't work. It would be nice if this was shown in the answer commented out with `// some code <- this doesn't work`
+
+
+# Day 11 iOS Foundations M2 L9
+
+#### Optionals
+
+* `?` to declare an optional
+* `!` to force unwrap an optional
+* `if let a = b {}` to `optional bind` where b is define above as `var b:Int?`
+
+If you declare an optional, you have to set it when you want use it.
+
+```
+// declare array is an optional array string
+var array:[String]?
+
+// I now want to use it based on some action user took so create an empty array. This is no longer nil but an empty array with an array.count == 0
+array = [String]()
+```
+
+#### Simple buttons
+
+If you just need a button with text then you can just use the following. It does not contain any formatting.
+
+```
+Button("test"){
+    print("another Button with action after")
+}
+```
+
+#### Not just a simple button
+To format the button with color and shape or image etc, we need to use this button style.
+
+```
+Button(action: {
+    array = nil
+},label: {
+    Text("Nil").foregroundColor(Color.green)
+})
+```
+
+#### What is the `\.self` thing?
+
+[From the Swift documentation](https://docs.swift.org/swift-book/ReferenceManual/Expressions.html#grammar_key-path-expression)
+
+```
+"The path can refer to self to create the identity key path (\.self). The identity key path refers to a whole instance, so you can use it to access and change all of the data stored in a variable in a single step. For example:"
+```
+
+oops, apparently, I missed seeing this used in lesson 3 `List Demo`
