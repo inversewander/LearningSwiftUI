@@ -465,3 +465,185 @@ Button(action: {
 ```
 
 oops, apparently, I missed seeing this used in lesson 3 `List Demo`
+
+
+# Day 12 iOS Foundations M2 L10 Dictionaries
+
+* Apr 4, 2021
+
+#### Dictionaries
+
+Create a dictionary
+```
+var a = [String:String]()
+```
+
+Add/update a key value pair
+```
+a["E1"] = "John"
+```
+
+Remove or unset a key value pair
+```
+a["E1"] = nil
+```
+
+Declaring and initializing key value pairs
+
+```
+var employees = ["E1":"John","E2":"Andy"]
+```
+
+Loop through dictionary
+
+```
+for employee in employees {
+  print(employee.key,"",employee.value)
+  print(employee.value)
+}
+```
+
+Loop through dictionary using a tuple
+
+```
+for (id, name) in employees {
+  print("\(id) \(employee)")
+}
+```
+
+I had difficulty going through the challenge.  I understand the concepts but it is hard to make it work the way someone else has outlined.  Not sure why.  So I just going to move forward.
+
+
+# Day 12 iOS Foundations M2 L11 Introduction to JSON
+
+* Apr 4, 2021
+
+#### JSON example
+```
+[
+{
+    "name":"Spaghetti",
+    "cuisine":"Italian"
+},
+{
+    "name":"Sushi",
+    "cuisine":"Japanese"
+}
+]
+```
+
+### JSON Array
+
+```
+[
+  "Pizza",
+  "Sushi"
+]
+```
+
+### Website where you can validate your JSON
+
+[jsonlint.com](https://jsonlint.com)
+
+
+# Day 12 iOS Foundations M2 L12 JSON Parsing
+
+This was a great lesson on how JSON parsing works.  It also explains how to load any type of data from a file in the project.
+
+* Apr 4, 2021
+
+#### Grab data from path inside a project
+
+
+```
+let pathString = Bundle.main.path(forResource: "filename", ofType: "extension")
+if let path = pathString { } // this block of code makes validates the optional.
+let url = URL(fileURLWithPath: path)
+let data = try Data(contentsOf: url) // <- this throws requires a do-try-catch block
+//can call a decoder once we have the data -- see below  <- this also throws
+```
+#### do-try-catch block
+
+* required for
+  * grabbing contents of a url
+  * parsing JSON data
+  * any object that requires a throw
+    * Error `Call can throw, but it is not marked with 'try' and the error is not handled`
+
+```
+do {
+let data = try ...
+
+} catch {
+  print(error)
+}
+```
+
+### JSONDecoder
+
+* Create a class to pull in the json
+* id should start out as optional
+  * can assign ids after parsing (UUID())
+* Make it decodable
+* mark Decodable Protocal <- the class above with .self
+
+```
+let decoder = JSONDecoder()
+
+                do {
+                    try decoder.decode([Recipe].self, from: data)
+
+                } catch {
+                    print(error)
+                }
+
+            } catch {
+                print(error)
+            }
+```
+
+# Day 13 iOS M2L13 The Recipe List App
+
+#### static func in a class
+
+If you make a function static in a class you can call it directly without making an instance of it.
+
+```
+self.recipes = DataService.getLocalData()
+```
+
+#### Guard let
+
+This is how it was taught in the lesson.
+```
+guard pathString != nil else { return [Recipe]() }
+```
+This is how I have seen it in other tutorials.
+```
+guard let path = pathString else { return [Recipe]() }
+```
+
+The benefit of the first is that you don't have to rename the variable. The benefit of the second is that it seems cleaner to write to me.
+
+#### Guard let vs if let
+
+[Stack Overflow Answer](https://stackoverflow.com/questions/32256834/swift-guard-let-vs-if-let)
+
+The equivelent to the `guard let` statement above would be
+```
+if let path = pathString {
+
+// code for url, decoder, id generation and then setting to a Published variable.
+
+}
+```
+* `if let` **nests its scope** meaning that the path variable is only available within the scope of the `{...}`
+* `guard let` **the else statement must exit the current scope**
+  * So if you put a `guard let` statement at the top of a function you want to call you can verify that the optional you have is not nil before proceeding or otherwise return or set an empty variable.
+
+#### Debugging and break points
+
+I never fully appreciated break points until this lesson.  The step-over and resume buttons above the debug console are awesome.
+
+* `po objectname` can be used to printout objects as you step through a for loop or step through the code.
+* drag a break point off the side to remove it
