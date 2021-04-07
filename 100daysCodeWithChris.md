@@ -604,7 +604,11 @@ let decoder = JSONDecoder()
 
 # Day 13 iOS M2L13 The Recipe List App
 
-#### static func in a class
+* Apr 5, 2021
+
+This was a very satisfying tutorial,  So many concepts got consolidated for me.
+
+### static func in a class
 
 If you make a function static in a class you can call it directly without making an instance of it.
 
@@ -612,7 +616,7 @@ If you make a function static in a class you can call it directly without making
 self.recipes = DataService.getLocalData()
 ```
 
-#### Guard let
+### Guard let
 
 This is how it was taught in the lesson.
 ```
@@ -622,12 +626,13 @@ This is how I have seen it in other tutorials.
 ```
 guard let path = pathString else { return [Recipe]() }
 ```
+A lot of the times it is just `{return}` as this would represent a major probleme and you want to know about it.
 
 The benefit of the first is that you don't have to rename the variable. The benefit of the second is that it seems cleaner to write to me.
 
-#### Guard let vs if let
+### Guard let vs if let
 
-[Stack Overflow Answer](https://stackoverflow.com/questions/32256834/swift-guard-let-vs-if-let)
+* [Stack Overflow Answer](https://stackoverflow.com/questions/32256834/swift-guard-let-vs-if-let)
 
 The equivelent to the `guard let` statement above would be
 ```
@@ -641,9 +646,36 @@ if let path = pathString {
 * `guard let` **the else statement must exit the current scope**
   * So if you put a `guard let` statement at the top of a function you want to call you can verify that the optional you have is not nil before proceeding or otherwise return or set an empty variable.
 
-#### Debugging and break points
+### Debugging and break points
 
 I never fully appreciated break points until this lesson.  The step-over and resume buttons above the debug console are awesome.
 
 * `po objectname` can be used to printout objects as you step through a for loop or step through the code.
 * drag a break point off the side to remove it
+
+# Day14-iOS-M2L14-ForEach-ScrollViews
+
+* Apr 6, 2021
+
+### ForEach
+
+* Used to generate UIView elements
+* Written in the same way as List()
+* Must be contained in a Stack or container
+
+```
+ForEach (array, id: \.self){ r in
+  // this code is repeated for each element
+  Text(r)
+}
+```
+
+### ScrollView container
+
+* container that scrolls
+
+
+
+# Day14-iOS-M2L15-Recipe-DetailView
+
+* Apr 6, 2021
