@@ -831,21 +831,23 @@ I went through the git repo tutorials by @mikaelacaron and got i mostly working.
 
 Tab Views look pretty straightforward
 
+1. Create a tab view and in it create the tabs
+2. modify the starting page to be this new view controller in the WindoGroup container
 
 ```swift
 @State var tabIndex = 0  // this will give the index tab value
 
-TabView {
+TabView (selection: $tabIndex) {  //tabIndex requires the $ symbol in order for the State var tabIndex can send information back to this tabview
     //View Objects go in here (what is in the view)
 
      Text("tab1")
           .tabItem {
-          // this is where you describe the tab
-          VStack {
-          Image(systemName: "star")
-          Text("tab 1")
-          }
-
-          }
+              // this is where you describe the tab (view contents)
+              VStack {
+              Image(systemName: "star")
+              Text("tab 1")
+            }//VStack
+          }//tabItem
+          .tag(1)
 }
 ```
