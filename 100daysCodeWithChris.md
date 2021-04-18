@@ -678,4 +678,174 @@ ForEach (array, id: \.self){ r in
 
 # Day14-iOS-M2L15-Recipe-DetailView
 
-* Apr 6, 2021
+* Apr 7, 2021
+
+Remember Navigation view from M2L3 where we only got a "Destination" string?
+
+```
+ NavigationView {
+            List(array, id: \.self) { arrayElement in
+                NavigationLink(
+                    destination: Text("Destination"),
+
+                    label: {
+                        Text(arrayElement)
+                    })
+
+            }.navigationTitle(Text("My List"))
+```
+
+Turns out that the `destination:` part can specify an entire view to load instead of just text.  This implies there is a way to also point to different views say with a button.
+
+```
+List(model.recipes) { r in
+  NavigationLink(
+      destination: RecipeDetailView(recipe: r),
+      label: {
+          HStack(spacing: 20) {
+              Image(r.image)
+                  .resizable()
+                  .scaledToFill()
+              Text(r.name)
+          }
+      })
+}
+```
+
+In this case we are passing a recipe variable into the destination view struct
+
+Inside that view struct we define a variable to hold the recipe or whatever we decide to pass in and is used to create the view struct.
+
+```
+struct RecipeDetailView: View {
+
+    var recipe:Recipe
+
+    var body: some View {
+
+
+}
+```
+
+#### Other useful concepts
+
+* //MARK will create sections you can jump to by clicking on the struct name at the top
+  * look for the `App > view > viewController > structName`
+* Divider() will place a divider in your view
+* .navigationBarTitle(recipe.name) after ScrollView
+
+# Day15-iOS-M2L15-challenge.
+
+* Apr 9, 2021
+
+
+I was making the challenge, harder than it needed to be.  Inside the `ForEach(model.pizzas) { r in` statement it is possible to display views that take in the `r` variable in this case.  This could really make interpreting the ContentView if multiple subviews were created and then called and supplied the `r` data variable to populate the subviews.
+
+# Day16-iOS-M2L16-finalChallenge
+
+* Apr 10, 2021
+
+**Spoiler Warning: This entry contains solutions to some of the challenges I faced while doing this challenge.  Not the complete code**
+
+Learned today that `NavigationView` is just another container like `ScrollView` or `VStack`  Order of course is important for containers but I get the impression that NavigationView tends to be near or at the Base of a view or collection of containers.
+
+The `NavigationLink` that is often associated with `NavigationView` can be used on any object not just inside a `List`.  In this way we can create a button that then takes you to a different view or text (as in a list) or an image.  This was not clear in tutorials up to this point and required that I google this and learn more about `NavigationView` and `NavigationLink`.  I can imagine this being very frustrating to new learners but an interesting approach to teaching as it forces us to find way to get the information we need to solve the challenge using whatever resource we can find, which is exactly what we will do when we have a project we want to start building and don't know where to start.
+
+```
+
+import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            ScrollView {
+
+                NavigationLink(
+                    destination: Text("Destination"),
+                    label: {
+                        Image("Leaf.png")
+                            .resizable()
+                            .scaledToFill()
+                    })//NavigationLink
+
+            }//ScrollView
+        }//NavigationView
+    }//Body
+}//Struct End
+```
+
+#### Adding a json file.  
+
+I tried just to create a new swift file and then change the file ending to `.json`.  This did not work.  My pathString always returned `nil`
+
+**Solution**
+* Make sure Target Membership is checked in `File inspector`
+* Make sure Text encoding is `Unicode (UTF-8)`
+* Verify it is listed in the bundle resources
+  * main app (click top of the folder that is your app name)
+  * Build phases tab
+  * Copy Bundle Resources
+    * click on the `+` to add it to the list.
+
+This took me well over an hour to figure out.
+
+#### Clearing the cache
+
+Sometimes Xcode does not behave nicely or you don't know why code isn't working, try clearing the cache.
+
+```
+command, option, shift K
+```
+
+#### Previews are their own view struct
+
+This should be obvious but it isn't always clear that extra code may be needed to make the preview struct to display in a manner that is similar to the ContentView struct if you move a chunk of code outside the content view.   In my case, I had moved most of the card code into its own view struct and the preview struct inside this view would only show one card at a time which skews what it looks like if I want to make additional edits.  So I can mimic what the app does by adding some of the missing components like `ScrollView` and `VStack`
+
+```
+struct Card_Previews: PreviewProvider {
+    static var previews: some View {
+        let model = QuoteModel()
+        ScrollView{
+            VStack {
+            Card(q:model.quotes[0])
+            Card(q:model.quotes[1])
+            Card(q:model.quotes[2])
+            Card(q:model.quotes[3])
+            }
+        }
+
+    }
+}
+```
+|  |  |  |
+| -- | -- | -- |
+| ![cards1](100daysCodeWithChris/iosFM2L16/cards1.png)| ![cards1](100daysCodeWithChris/iosFM2L16/cards2.png)| ![author](100daysCodeWithChris/iosFM2L16/author.png)|
+
+
+# Day-17-TabView
+
+* Apr 17, 2021
+* iOS Foundations Module 4
+
+I went through the git repo tutorials by @mikaelacaron and got i mostly working.  I had been version controlling by placing the contents into GitHubs Atom program.  Nice to find another way to do it.
+
+Tab Views look pretty straightforward
+
+
+```swift
+@State var tabIndex = 0  // this will give the index tab value
+
+TabView {
+    //View Objects go in here (what is in the view)
+
+     Text("tab1")
+          .tabItem {
+          // this is where you describe the tab
+          VStack {
+          Image(systemName: "star")
+          Text("tab 1")
+          }
+
+          }
+}
+```
