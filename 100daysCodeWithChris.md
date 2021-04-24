@@ -851,3 +851,68 @@ TabView (selection: $tabIndex) {  //tabIndex requires the $ symbol in order for 
           .tag(1)
 }
 ```
+
+# Day-18-geometryReader
+
+* Apr 19, 2021
+* iOS Foundations Module 4 Lesson 4
+
+#### GeometryReader
+
+Geometry reader is a container that acts similar to a ZStack but can provide position information.
+
+```
+GeometryReader { geo in
+  Rectangle()
+    .frame(width: geo.size.width)
+    geo.frame(in: .local).minX  // get the location in local or global positioning
+}
+```
+
+#### Shapes
+
+* Circle()
+* Rectangle()
+
+#### Gestures
+
+Modifier that can be applied to an object like the Circle or Rectangle or container.
+
+```swift
+.onTapGesture {
+  // code to execute onTap gesture
+}
+```
+
+#### Positioning
+
+* `.padding`
+* `.offSet`
+
+# Day-19-environmentObject
+
+* Apr 24, 2021
+* iOS Foundations Module 4 Lesson 5,6
+
+
+The environmentObject modifier can be attached to a view object to supply data to all downstream views
+
+
+So at the top level view code may look like this with RecipeModel() containing the data we want to use in the downstream views.
+```
+TabView {
+
+}
+.environmentObject(RecipeModel())
+
+```
+
+Each downstream view will need to have a line of code that defines a variable that the environmentObject data can be placed.
+
+```
+@EnvironmentObject var model:RecipeModel
+```
+
+Something to keep in mind: I read that environmentObjects are kept in memory for the lifetime of the app, which means, we want to be careful the type can quantity of data we store in an environmentObject.
+
+[This website](https://shensheng.medium.com/swiftui-difference-of-state-binding-environment-and-environmentobject-and-when-to-use-them-ff80699f45b7) had a really great explanation between `@State`, `@Binding` `@EnvironmentObject` and when to use them.
