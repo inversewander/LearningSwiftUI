@@ -916,3 +916,459 @@ Each downstream view will need to have a line of code that defines a variable th
 Something to keep in mind: I read that environmentObjects are kept in memory for the lifetime of the app, which means, we want to be careful the type can quantity of data we store in an environmentObject.
 
 [This website](https://shensheng.medium.com/swiftui-difference-of-state-binding-environment-and-environmentobject-and-when-to-use-them-ff80699f45b7) had a really great explanation between `@State`, `@Binding` `@EnvironmentObject` and when to use them.
+
+
+# Day-20-challenge
+
+* Apr 24, 2021
+* iOS Foundations Module 4 Lesson 6 Challenge
+
+**Spoiler Warning** lots of hints on how I solved this challenge below.
+
+---
+
+Create an app with 2 tabs that displays person information.
+
+When creating a class, either the class has to have a default init function
+
+```
+init() {
+  //code here that will create default values for all variables in the class
+}
+```
+or
+
+All the elements in the class should be optional except say the Id.
+
+```
+class Person: Identifiable {
+
+    var id = UUID()
+    var name:String?
+    var address:String?
+    var company:String?
+    var experience:Int?
+
+}
+```
+
+What we want here though is actually a struct not a class as it makes it easier to create a people Array of Persons.
+
+
+## Error: `invalid mode 'kCFRunLoopCommonModes'`
+
+[StackOverflow](https://stackoverflow.com/questions/56980875/what-does-invalid-mode-kcfrunloopcommonmodes-mean) suggests this is just a warning that Apple is working on and can be safely ignored.
+
+## toggles object
+
+We can only pass one object to the environmentObject modifier that we use on the TabView.  So we need to create an object that can hold the for bool variables.
+
+```
+class toggles: ObservableObject {
+    @Published var showName = true
+    @Published var showAddress = true
+    @Published var showCompany = false
+    @Published var showExperience = true
+}
+```
+
+Those variables need to be `@Published` or else the toggles won't update the class variables and the class needs to be an `ObservableObject`.
+
+I really liked how this challenged forced me to combine all the elements we have learned so far.
+
+* TabView
+  * View Instances for FirstTab and Second Tab
+* environmentObject, @EnvironmentObject
+* ObservableObject, @Published, @State
+* Structs, arrays,
+* Lists,
+* If statements
+* Toggle
+* MVVM model
+
+# Day-21-FeatureView
+
+* iOS Foundations Module 4 Lesson 7 Challenge
+* Apr 25, 2021
+
+This lesson went super fast.  I had to pause it several times to catch up.  I also had to find a mistake as to why my `                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
+` was not working properly.  The dots weren't showing up.  Turned out I had placed that modifier in the wrong location.  It needed to be attached to the `}` of `TabView` and I had it one curly bracket up.  I have started to label all of my end brackets like this.
+
+```
+VStack {
+  HStack {
+    GeometryReader { geo in
+                TabView {
+
+                }//TabView
+    } //GeometryReader
+  }//Hstack
+}// Vstack
+```
+
+At least for now this seems to make it easier for me to see the code clearly.
+
+Things I learned
+
+## Use TabView to make swipable cards
+```
+TabView {
+  //code
+}
+.tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
+.indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+```
+
+## How to add a Shadow
+
+```
+Rectangle()
+.shadow(color: Color(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.5), radius: 10,x: -5, y: 5)
+```
+
+## Review of VStack parameters
+
+Very useful for modifying space
+```
+VStack(alignment: .leading, spacing: 0)
+```
+
+
+# Day-21-colorSlider
+
+* Apr 25, 2021
+
+Took a break and tried to make a color slider. I think it came out well.
+
+![colorSlider](https://codecrew.codewithchris.com/uploads/default/original/2X/5/58b0ccf45f0a3691b390de2d6a377b16172e8277.gif)
+
+# Day-22-StockPickerChallenge
+
+* Stock Picker Challenge
+* Apr 30, 2021
+
+While I am enjoying the tutorials, I am itching to try out my skills on a project without step by step instructions.  I could start on some of my own ideas but I know they require core data and some other skills i haven't gotten to yet.  So instead I am going to dive into the Stock Picker Challenge this month with the rest of the CodeCrew group.  
+
+## Basic Requirements for the Challenge:
+
+* Get stock data from an API
+* Display a list of stocks, with respective prices and changes in dollar amount.
+* Be able to edit the same list of stocks, and have the option to remove and add stocks by ticker symbol.
+
+I am going to aim for this basic requirement and add in a few extra features that I am interested in learning how to do.
+
+Since this challenge starts tomorrow, I want to make sure I can utilize the API properly
+
+## The API
+
+Per the recommendation in the challenge, I am goign to use this [Stock API](https://financialmodelingprep.com/developer/docs/)
+
+I tried using the apikey=demo and all that this key can do is apparently pull down data for stock ticker symbol AAPL.  If you try to do a batch pull or any other symbol you get the following error.
+
+```
+{"Error Message" : "Invalid API KEY. Please retry or visit our documentation to create one FREE https://financialmodelingprep.com/developer/docs"}
+```
+
+The only way to get around this is to sign up for a free account.  They don't ask you for a credit card and it gives you 250 requests per day.
+
+
+[Sign up for a free API key here](https://financialmodelingprep.com/login)
+
+After I signed up it said you had to verify your email but I never got an email so I signed in through my google account and was able to get to the dashboard they provide which has the api key.  Once I had that everything worked as expected for single stock picker symbols. We can test this directly in the web browser and get a couple stocks to populate a json of starter stocks to explore in the App.
+
+```
+https://financialmodelingprep.com/api/v3/quote/GOOG?apikey=myNewShinyAPIKey
+```
+
+Turns out that for batch submissions you need to upgrade for the subscription package.  I am not going to be doing this as this is just for fun so we are limited to single tock ticker api requests.
+
+```
+https://financialmodelingprep.com/api/v3/quote/GE,GOOG?apikey=myNewShinyAPIKey
+{"Error Message" : "Special Endpoint : this endpoint is only for premium members please visit our subscription page to upgrade your plan at https://financialmodelingprep.com/developer/docs/pricing"}
+```
+
+**NOTE:** you have to replace myNewShinyAPIKey with the `apikey` from your account or it won't work.
+
+So we now can get one stock at a time.  
+
+### GE
+
+```
+https://financialmodelingprep.com/api/v3/quote/GE?apikey=myNewShinyAPIKey
+[ {
+  "symbol" : "GE",
+  "name" : "General Electric Company",
+  "price" : 13.12000000,
+  "changesPercentage" : -0.68000000,
+  "change" : -0.09000000,
+  "dayLow" : 13.08000000,
+  "dayHigh" : 13.35000000,
+  "yearHigh" : 14.42000000,
+  "yearLow" : 5.48000000,
+  "marketCap" : 115175759872.00000000,
+  "priceAvg50" : 13.24200000,
+  "priceAvg200" : 11.16021700,
+  "volume" : 48760561,
+  "avgVolume" : 76976082,
+  "exchange" : "NYSE",
+  "open" : 13.16000000,
+  "previousClose" : 13.21000000,
+  "eps" : -0.45300000,
+  "pe" : null,
+  "earningsAnnouncement" : "2021-04-27T12:30:00.000+0000",
+  "sharesOutstanding" : 8778640234,
+  "timestamp" : 1619825257
+} ]
+```
+
+### AAPL
+
+```
+https://financialmodelingprep.com/api/v3/quote/AAPL?apikey=myNewShinyAPIKey
+[ {
+  "symbol" : "AAPL",
+  "name" : "Apple Inc.",
+  "price" : 131.46000000,
+  "changesPercentage" : -1.51000000,
+  "change" : -2.02000000,
+  "dayLow" : 131.06500000,
+  "dayHigh" : 133.56000000,
+  "yearHigh" : 145.09000000,
+  "yearLow" : 71.46250000,
+  "marketCap" : 2206963859456.00000000,
+  "priceAvg50" : 127.59143000,
+  "priceAvg200" : 125.78232000,
+  "volume" : 105917721,
+  "avgVolume" : 100930927,
+  "exchange" : "NASDAQ",
+  "open" : 131.78000000,
+  "previousClose" : 133.48000000,
+  "eps" : 4.44900000,
+  "pe" : 29.54821600,
+  "earningsAnnouncement" : "2021-04-28T16:30:00.000+0000",
+  "sharesOutstanding" : 16788101776,
+  "timestamp" : 1619825031
+} ]
+```
+
+### GOOG
+
+```
+https://financialmodelingprep.com/api/v3/quote/GOOG?apikey=myNewShinyAPIKey
+
+[ {
+  "symbol" : "GOOG",
+  "name" : "Alphabet Inc.",
+  "price" : 2410.12000000,
+  "changesPercentage" : -0.81000000,
+  "change" : -19.77000000,
+  "dayLow" : 2402.29000000,
+  "dayHigh" : 2427.14000000,
+  "yearHigh" : 2452.37800000,
+  "yearLow" : 1299.00000000,
+  "marketCap" : 1602411692032.00000000,
+  "priceAvg50" : 2187.98320000,
+  "priceAvg200" : 1915.57230000,
+  "volume" : 1881168,
+  "avgVolume" : 1499530,
+  "exchange" : "NASDAQ",
+  "open" : 2404.49000000,
+  "previousClose" : 2429.89000000,
+  "eps" : 75.04000000,
+  "pe" : 32.11780500,
+  "earningsAnnouncement" : null,
+  "sharesOutstanding" : 664868012,
+  "timestamp" : 1619825446
+} ]
+```
+
+# Day 23-StockPickerD2
+
+* Day2 of the StockPickerChallenge
+* May 1, 2021
+
+## Steps I have taken
+
+
+1) Use the recipeList app as a template
+2) Set up groups:  
+  a) MVVM
+  b) Data
+  c) Services
+  d) Extensions
+3) Copy over from recipeList these files
+  a) RecipeModel.swift -> StockModel.swift
+  b) DataServices.swift
+  c) recipes.json -> stocks.json
+  d) add json data from the three stocks above
+  e) RecipeListView -> StockListView
+4) Create Stock.swift
+  a) Be careful not to mistype any of the names in the json or it won't work!
+5) Modify the DataServices.swift to work with the new stocks.json file
+5) Create Views
+  a) contentView -> StockListView
+  b) StockInfoView
+
+I decided to keep using the `@EnvironmentObject var model:StockModel` so it is important to modify the App.swift file to include the `.environmentObject(StockModel)`  This took me a while to remember.  It kept complaining about a type error.  
+
+```
+@main
+struct StockTrackerChallengeApp: App {
+    var body: some Scene {
+        WindowGroup {
+            StockListView().environmentObject(StockModel())
+
+        }
+    }
+}
+```
+
+This really just gets us to the point where we can start building the interface using the data from the json file.  Once we are happy with the interface we can go back and rewrite the DataServices.swift to read from an Array of our choosing and then save that array to Defaults.  Ideally I would save it to core data but I haven't learned that yet. :)
+
+
+
+## Trailing Zeros
+
+Those trailing zeros are really ugly.  I found this [extension on stackoverflow](https://stackoverflow.com/questions/29560743/swift-remove-trailing-zeros-from-double) that extends double and add a function that will remove the extra zeros.
+
+```
+import Foundation
+
+extension Double {
+    func removeZerosFromEnd() -> String {
+        let formatter = NumberFormatter()
+        let number = NSNumber(value: self)
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 16 //maximum digits in Double after dot (maximum precision)
+        return String(formatter.string(from: number) ?? "")
+    }
+}
+```
+
+With this you can add Text elements to a view like this
+
+```
+Text(" $ \((r.price).removeZerosFromEnd())")
+```
+
+## Conditional modifiers!
+
+Learned another new thing in swift.
+
+```
+.foregroundColor((r.change < 0) ? .red : .green)
+```
+
+## TODO
+
+* add a `+` symbol to link to a function to add a new stock.
+* add a function that will download a new stock
+  * append added stock to stock array.
+* add a popup to specify which ticker symbol to download
+* delete a stock using a touch gesture drag to the right
+* save array for future sessions
+
+
+## Day-24-stockPickerD3
+
+* Day 3 of the StockPickerChallenge
+
+## add a `+` symbol to link to a function to add a new stock.
+
+```
+.navigationBarTitle("Your Stocks")
+    .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                Button("+") {
+                  self.showingAlert.toggle()
+                }
+            }//ToolBargroup
+    }//toolbar
+ ```
+## add a function that will download a new stock
+This was considerably more challenging as it involves the Apps architecture.  It would make sense that this function should be part of the DataServices.swift file but that is currently decoding my local json (in app) file with a few example Stocks.  And the StockModel.swift then grabs that data and sets it to an array of Stocks.
+
+Perhaps I could still put this function in dataServices but I have it currently in StockModel so that I can just call it directly from model in my views.
+
+```
+func getRemoteData(ticker: String)  {
+        //let ticker = "OTTR"
+
+        // Set up url with ticker variable
+        let url = URL(string: "https://financialmodelingprep.com/api/v3/quote/\(ticker)?apikey=0f5eedfec854e23eb12dc71fbaa4dab7")
+
+        //create the url request
+        var request = URLRequest(url: url!)
+
+        // this code is from the example they provided from the API and returns data.
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        let task = URLSession.shared.dataTask(with: url!) { data, response, error in
+            guard error == nil else {
+                print(error!)
+                return
+            }//Guard
+            guard let data = data else {
+                print("Data is empty")
+                return
+            }//Guard
+
+          // process the data from the url request as we would from file and append to [Stocks] array
+            do {
+                // decode data with a JSONDecoder
+               let decoder = JSONDecoder()
+               //
+                //pass in type
+                do {
+                    let stockData = try decoder.decode([Stock].self, from: data)
+                    // add unique IDs
+                        for r in stockData {
+                            r.id = UUID()
+                            print(r.name)
+                        }//for
+
+                        // Return the stocks
+                    DispatchQueue.main.async { // required to run on the main thread to execute this.
+                        self.stocks = self.stocks + stockData
+                    }
+                } catch {
+                    print(error)
+                }//do-catch
+
+
+        }
+
+        }//task
+        task.resume()
+
+
+    }
+
+```
+
+I spent a lot of time realizing that the `URLSession.shared.dataTask` already gives us a data variable that we can use directly in the JSONdecoder.  I kept trying to convert the json into a Data object, which apparently I already had. :/
+
+
+#### append added stock to stock array.
+
+Turns out if you want to modify an environmentObject you have to run it on the main thread so I had to wrap this modification in a `DispatchQueue.main.async` block
+
+```
+DispatchQueue.main.async { // required to run on the main thread to execute this.
+     self.stocks = self.stocks + stockData
+ }
+```
+
+## add a popup to specify which ticker symbol to download
+
+I really wanted to include an alert and @Chris_Parker has a great solution.
+
+[Chris Parker's swiftUI alert](https://codecrew.codewithchris.com/t/swiftui-modal-with-textfield/4569/4)
+
+I went ahead and just made an if else statement that either shows the popup or the list of stocks.
+
+
+## TODO
+
+* Why is the textEnterednot updating unless done twice?
+* delete a stock using a touch gesture drag to the right
+* save array for future sessions
