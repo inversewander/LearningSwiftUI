@@ -832,7 +832,7 @@ I went through the git repo tutorials by @mikaelacaron and got i mostly working.
 Tab Views look pretty straightforward
 
 1. Create a tab view and in it create the tabs
-2. modify the starting page to be this new view controller in the WindoGroup container
+2. modify the starting page to be this new view controller in the WindowGroup container
 
 ```swift
 @State var tabIndex = 0  // this will give the index tab value
@@ -891,7 +891,7 @@ Modifier that can be applied to an object like the Circle or Rectangle or contai
 
 # Day-19-environmentObject
 
-* Apr 24, 2021
+* Apr 23, 2021
 * iOS Foundations Module 4 Lesson 5,6
 
 
