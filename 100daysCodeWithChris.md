@@ -1272,6 +1272,7 @@ Learned another new thing in swift.
 ## Day-24-stockPickerD3
 
 * Day 3 of the StockPickerChallenge
+* May 2, 2021
 
 ## add a `+` symbol to link to a function to add a new stock.
 
@@ -1369,6 +1370,142 @@ I went ahead and just made an if else statement that either shows the popup or t
 
 ## TODO
 
-* Why is the textEnterednot updating unless done twice?
+* Why is the textEntered not updating unless done twice?
+  * I needed to add the model environmentObject to the CustomAlert View and then run the model.getRemote function from there and it updated as expected.
 * delete a stock using a touch gesture drag to the right
 * save array for future sessions
+
+
+
+This pretty much finishes the basic requirements for the challenge but there are so many missing features yet. I have decided to model my app after the Stocks app that we all have on our phones as default.
+
+## Additional Features
+
+* refresh button pull down if possible
+* Chart of last day or week or couple days of change.
+
+# Day-25-StockPickerD4
+
+* May 3, 2021
+* Day 4 of the StockPickerChallenge
+
+
+## delete a stock using a touch gesture drag to the left
+
+I learned so much while implementing this. It is super easy to make a editable list and add the option to move items around in a list.  SwiftUI pretty much gives this to us for free.
+
+The following modifiers can be attached to a `ForEach` block
+
+* `.onDelete(perform: deleteItems)`
+* `.onMove(perform: move)`
+
+My List didn't have a `ForEach` block so I had to change
+
+```swift
+List(model.stocks) { r in
+
+}
+```
+
+to
+
+```swift
+List {
+                ForEach(model.stocks, id: \.self) { r in  //requies that model.stocks conforms to Hashable
+
+                }//ForEach
+                .onDelete(perform: deleteItems)
+                .onMove(perform: moveItem)
+
+      }
+```
+
+This caused an error that the Stock.swift Model had to conform to Hashable for this to work.  And it turns out this can't be done automagically if the Stock Object is a class instead of a struct.
+
+In order to add Hashable to Stock.swift I had to add the following two functions
+
+* `==`
+* `hash`
+
+```swift
+class Stock: Identifiable, Decodable, Hashable {
+    static func == (lhs: Stock, rhs: Stock) -> Bool {
+        return lhs.id == rhs.id
+
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
+    }
+
+    // will decode what we want to decode
+    var id:UUID?
+    var symbol:String
+    var name:String
+    var price:Double
+    var changesPercentage:Double
+    var change:Double
+    var dayLow:Double
+    var dayHigh:Double
+    var yearLow:Double
+    var yearHigh:Double
+    var open:Double
+    var timestamp:Int
+
+}
+```
+
+With that everything just automagically works!
+
+
+## Adding the red/green rectangle
+
+```swift
+ZStack {
+              Rectangle()
+                  .foregroundColor((r.change < 0) ? .red : .green)
+                  .frame(width: 70, height: 20, alignment: .trailing)
+              Text(" \(r.change.removeZerosFromEnd())")
+                  .foregroundColor(.white)
+                  .bold()
+
+}
+```
+![Screen Shot 2021-05-04 at 9.50.51 PM|363x500, 50%](https://codecrew.codewithchris.com/uploads/default/optimized/2X/0/0913cf1d0e3439a3c395cf12ebe2f9161f5515fb_2_544x750.png)
+
+This pretty much finishes the basic requirements for the challenge but there are so many missing features yet. I have decided to model my app after the Stocks app that we all have on our phones as default.
+
+## Additional Features
+
+* refresh button pull down if possible
+* Chart of last day or week or couple days of change.
+
+
+# Day-26-StockPickerD4
+
+* May 6, 2021
+* Day 5 of the StockPickerChallenge
+
+## Refresh button pull down if possible
+
+This apparently has not been added yet and has to be coded.  I tried to implement it with what I found [here: how-to-making-pure-swiftui-pull-to-refresh](https://prafullkumar77.medium.com/how-to-making-pure-swiftui-pull-to-refresh-b497d3639ee5) but it doesn't seem to be very easy to add to my code.  I suspect that this will be added after WWDC so I won't fret about it for now and make a refresh button.  It was really the backend that I wanted to figure out how to do anyway.  
+
+* How do you update each stock.  If we owned the API or had the backend we could do a bulk udpate but since we don't and have to use one stock at a time I will have to do a loop through each of the Stocks and update them one by one.
+
+If they do add an `onPull(perform: refresh)` operation, it will be really easy to just put the refresh function in it later.
+
+For the charts, I learned how to use the `swift package manager`
+
+## Swift Package Manager (swiftPM)
+
+1) click on the app name and you will have several tabs you can choose from.  This is the same area where you can set the iOS Deployment Target.  
+2) Click on the <span style="color:Green">Swift Packages</span> Tab
+3) Click on the `+` under the Packages.
+4) Enter the github repo for the package.
+
+That's it!  
+
+So I added a package called SwiftUICharts.  It is still rudimentary but looks like they are going to be coming out with a version 2 soon.  The nice thing about the line chart form this package is that it will take in an array of numbers and draw the chart for you.  I have a simple mockup using an array I randomly generated.  I need to add the code that pulls the day or week change in value for each stock ticker.  
+
+![swiftuiChartExample](https://codecrew.codewithchris.com/uploads/default/original/2X/9/977e20c5398ed654f42a70fe320aa37efd28d825.jpeg)
+
+Once I have these two functions implemented I am going to go back to the tutorials for a bit. Though looks like I may have trouble with iOS foundations Module 5 as I had to update to XCODE 12.5 since I had updated my phone to 14.5.  
