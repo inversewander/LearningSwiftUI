@@ -909,7 +909,7 @@ TabView {
 
 Each downstream view will need to have a line of code that defines a variable that the environmentObject data can be placed.
 
-```
+```swift
 @EnvironmentObject var model:RecipeModel
 ```
 
@@ -940,7 +940,7 @@ or
 
 All the elements in the class should be optional except say the Id.
 
-```
+```swift
 class Person: Identifiable {
 
     var id = UUID()
@@ -994,7 +994,7 @@ I really liked how this challenged forced me to combine all the elements we have
 This lesson went super fast.  I had to pause it several times to catch up.  I also had to find a mistake as to why my `                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
 ` was not working properly.  The dots weren't showing up.  Turned out I had placed that modifier in the wrong location.  It needed to be attached to the `}` of `TabView` and I had it one curly bracket up.  I have started to label all of my end brackets like this.
 
-```
+```swift
 VStack {
   HStack {
     GeometryReader { geo in
@@ -1065,7 +1065,7 @@ Per the recommendation in the challenge, I am goign to use this [Stock API](http
 
 I tried using the apikey=demo and all that this key can do is apparently pull down data for stock ticker symbol AAPL.  If you try to do a batch pull or any other symbol you get the following error.
 
-```
+```swift
 {"Error Message" : "Invalid API KEY. Please retry or visit our documentation to create one FREE https://financialmodelingprep.com/developer/docs"}
 ```
 
@@ -1211,7 +1211,7 @@ https://financialmodelingprep.com/api/v3/quote/GOOG?apikey=myNewShinyAPIKey
 
 I decided to keep using the `@EnvironmentObject var model:StockModel` so it is important to modify the App.swift file to include the `.environmentObject(StockModel)`  This took me a while to remember.  It kept complaining about a type error.  
 
-```
+```swift
 @main
 struct StockTrackerChallengeApp: App {
     var body: some Scene {
@@ -1231,7 +1231,7 @@ This really just gets us to the point where we can start building the interface 
 
 Those trailing zeros are really ugly.  I found this [extension on stackoverflow](https://stackoverflow.com/questions/29560743/swift-remove-trailing-zeros-from-double) that extends double and add a function that will remove the extra zeros.
 
-```
+```swift
 import Foundation
 
 extension Double {
@@ -1247,7 +1247,7 @@ extension Double {
 
 With this you can add Text elements to a view like this
 
-```
+```swift
 Text(" $ \((r.price).removeZerosFromEnd())")
 ```
 
@@ -1255,7 +1255,7 @@ Text(" $ \((r.price).removeZerosFromEnd())")
 
 Learned another new thing in swift.
 
-```
+```swift
 .foregroundColor((r.change < 0) ? .red : .green)
 ```
 
@@ -1276,7 +1276,7 @@ Learned another new thing in swift.
 
 ## add a `+` symbol to link to a function to add a new stock.
 
-```
+```swift
 .navigationBarTitle("Your Stocks")
     .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
@@ -1291,7 +1291,7 @@ This was considerably more challenging as it involves the Apps architecture.  It
 
 Perhaps I could still put this function in dataServices but I have it currently in StockModel so that I can just call it directly from model in my views.
 
-```
+```swift
 func getRemoteData(ticker: String)  {
         //let ticker = "OTTR"
 
@@ -1509,3 +1509,109 @@ So I added a package called SwiftUICharts.  It is still rudimentary but looks li
 ![swiftuiChartExample](https://codecrew.codewithchris.com/uploads/default/original/2X/9/977e20c5398ed654f42a70fe320aa37efd28d825.jpeg)
 
 Once I have these two functions implemented I am going to go back to the tutorials for a bit. Though looks like I may have trouble with iOS foundations Module 5 as I had to update to XCODE 12.5 since I had updated my phone to 14.5.  
+
+
+# Day-27-StockPickerD4
+
+* May 7, 2021
+* Day 6 of the StockPickerChallenge
+
+For those readers paying attention you will notice that my dates aren't consistent with the Day of my 100 days and that is because I don't always get an opportunity to code every day.  And I want this to reflect what I accomplish in 100 days that I am actually coding.  
+
+Today I tackled the refresh all stocks button.
+
+## Refresh Button
+
+I put the refresh button in the same toolbar group as the EditButton()
+
+
+For each stock in the model run the getRemoteData function for that stock.symbol
+
+```
+ToolbarItemGroup(placement: .navigationBarTrailing) {
+        Button("Refresh") {
+            for stock in model.stocks {
+                model.getRemoteData(ticker: stock.symbol)
+            }
+            }
+
+        EditButton()
+
+}
+ ```
+
+Of course for that to work properly we have to modify the getRemoteData function
+
+## getRemoteData() function
+
+* Check to see if stock symbol is already present
+* if present replace stock data at the correct position in the stock array with new data.
+* if not present append to stock array
+
+```swift
+func getRemoteData(ticker: String)  {
+        //let ticker = "OTTR"
+
+        // Set up url with ticker variable
+        let url = URL(string: "https://financialmodelingprep.com/api/v3/quote/\(ticker)?apikey=myNewShineyAPIKey")
+
+        //create the url request
+        var request = URLRequest(url: url!)
+// had to add a stockSymbols varaible here
+        var stockSymbols = [String]()  // store all the stock symbols
+
+        // this code is from the example they provided from the API and returns data.
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        let task = URLSession.shared.dataTask(with: url!) { data, response, error in
+            guard error == nil else {
+                print(error!)
+                return
+            }//Guard
+            guard let data = data else {
+                print("Data is empty")
+                return
+            }//Guard
+
+          // process the data from the url request as we would from file and append to [Stocks] array
+            do {
+                // decode data with a JSONDecoder
+               let decoder = JSONDecoder()
+               //
+                //pass in type
+                do {
+                    let stockData = try decoder.decode([Stock].self, from: data)
+                    // add unique IDs
+                        for r in stockData {
+                            r.id = UUID()
+                            print(r.name)
+                        }//for
+
+                        // Return the stocks
+///Modified this block of code
+                    DispatchQueue.main.async { // required to run on the main thread to execute this.
+
+                        for stock in self.stocks {
+
+                            stockSymbols.append(stock.symbol)
+                        }
+                        if stockSymbols.contains(ticker) {  // Check to see if the symbol already exists and if so update it
+                            self.stocks[stockSymbols.firstIndex(of: ticker)!] = stockData[0]
+                        } else {  //otherwise add it to the stocks
+                        self.stocks = self.stocks + stockData
+                        }//IFELSE block
+
+                    }//DispatchQueue
+///Modified block of code above
+                } catch {
+                    print(error)
+                }//do-catch
+
+
+        }
+
+        }//task
+        task.resume()
+
+
+    }
+```
