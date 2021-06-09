@@ -1797,9 +1797,139 @@ With this template, we can now design the App in SwiftUI and wrap the SpriteKit 
 
 
 
-# Day-29-SwiftUI-and-spritekit
+# Day-29-SwiftUI-and-spritekit-Geometry
 
 * Jun 9, 2021
 * Geometry reader
 
-Next up is can I incoporate geometryReader into the SpriteView so that it fills up the available space?
+Next up is can I incorporate geometryReader into the SpriteView so that it fills up the available space?  The main issue I was having is that when rotated, the scene was causing the boxes to elongate and weren't boxes anymore as the scene was stretched.  That won't be good to go to production.
+
+## Solution
+
+#### MainScreen.swift
+1) Created a `@State` variable in the MainScreen.swift
+
+```
+@Binding var geoSize: CGSize
+```
+
+2) Added an `.onRecive(notificationCenter)` after Navigation view that updates the `geoSize` binding upon a device change orientation notification.
+
+3) Added a function that sets the Geometry size.
+
+```
+private func saveGeoSize(for geo: GeometryProxy){
+    let size = CGSize(width: geo.size.width, height: geo.size.height)
+    self.geoSize = size
+    print(self.geoSize)
+}
+```
+
+```
+struct MainScreen: View {
+    @State var geoSize = CGSize(width: 30, height: 40)
+    @State var reOrient = false
+
+    var body: some View {
+        GeometryReader { geo in
+                NavigationView {
+                    ScrollView {
+
+                        NavigationLink(
+                            destination: BoxDropView(geoSize: $geoSize, reOrient: $reOrient),
+                            label: {
+                                Text("Box Drop Game")
+                            })//NavigationLink
+
+                    }//ScrollView
+                }//NavigationView
+                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                    self.reOrient = true
+                    self.saveGeoSize(for: geo)
+
+                }
+        } //GeometryReader
+    }//Body
+
+    private func saveGeoSize(for geo: GeometryProxy){
+        let size = CGSize(width: geo.size.width, height: geo.size.height)
+        self.geoSize = size
+        print(self.geoSize)
+    }
+}//Struct End
+```
+#### BoxDropView
+
+
+
+1) added a `@Binding`
+
+```
+@Binding var geoSize: CGSize
+
+```
+
+2) Updated the scene.size and SpriteView().frame variables
+
+```
+scene.size = CGSize(width: self.geoSize.width*0.9, height: geoSize.height*0.9)
+```
+```
+SpriteView(scene: scene)
+                                .frame(width: geo.size.width*0.9, height: geo.size.height*0.9)
+                                .ignoresSafeArea()
+```
+
+## references
+
+* [swiftui-pass-value-from-geometry-reader-to-function](https://stackoverflow.com/questions/60514912/swiftui-pass-value-from-geometry-reader-to-function)
+
+## Remaining issues
+
+* The scene resets every time the notification is activated.  The binding updates which the updates the scene by creating a new BoxDropScene, which is a class so all children (boxes) get reset every time you reorient. I could just force it to be in one or the other mode but I am curious to see what other options are possible.  I suppose I could also make it so upon rotation the frame doesn't change from the original size.  But both of these are not terribly satisfying.
+
+# Day-29-Shared-Instances
+
+* Jun 9, 2021
+* Shared instances
+
+Shared instances appear to solve most of the issue I am having but not fully.
+
+## Solution
+
+1) Add a shared instance to the `BoxDropScene` class
+
+```
+class BoxDropScene: SKScene {
+    static let shared = BoxDropScene()
+```
+
+2) Change the instance of the BoxDropScene upon creation in `BoxDropView.swift` from  
+
+```
+var scene: SKScene {
+
+        let scene = BoxDropScene()
+```
+to
+```
+var scene: SKScene {
+        let scene = BoxDropScene.shared
+```
+
+## Remaining Issues
+
+ The children in the box can be lost when going from landscape to portrait and the State variable is in the mainScreen, which means the geoSizes (portrait or landscape) is set on that screen.
+
+
+## Question
+Can I keep users from switching after entering the game?  -- Looks like this is possible though may be slightly more complicated to pull off. See [SwiftUI: Force orientation on a per screen basis
+](https://developer.apple.com/forums/thread/125155) for more details.
+
+## References
+
+*
+[spritekit-transition-between-scenes-without-resetting-game](https://stackoverflow.com/questions/38712219/spritekit-transition-between-scenes-without-resetting-game)
+
+
+I think if I make a game I will just decide to have it in one orientation if I am going to
