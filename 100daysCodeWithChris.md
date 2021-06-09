@@ -1480,7 +1480,7 @@ This pretty much finishes the basic requirements for the challenge but there are
 * Chart of last day or week or couple days of change.
 
 
-# Day-26-StockPickerD4
+# Day-26-StockPickerD5
 
 * May 6, 2021
 * Day 5 of the StockPickerChallenge
@@ -1511,7 +1511,7 @@ So I added a package called SwiftUICharts.  It is still rudimentary but looks li
 Once I have these two functions implemented I am going to go back to the tutorials for a bit. Though looks like I may have trouble with iOS foundations Module 5 as I had to update to XCODE 12.5 since I had updated my phone to 14.5.  
 
 
-# Day-27-StockPickerD4
+# Day-27-StockPickerD6
 
 * May 7, 2021
 * Day 6 of the StockPickerChallenge
@@ -1615,3 +1615,191 @@ func getRemoteData(ticker: String)  {
 
     }
 ```
+
+
+# Day-28-StockPickerD7
+
+* May 8, 2021
+* Day 7 of the StockPickerChallenge
+
+
+The goal today is to implement the [per minute data](https://financialmodelingprep.com/api/v3/historical-chart/1min/AAPL?apikey=demo) from the [financialmodelingprep.com website](https://financialmodelingprep.com/developer/docs/#Stock-Historical-Price).
+
+
+If we look at this json file we notice it is already an array.  
+
+```swift
+{
+  "symbol" : "AAPL",
+  "historical" : [ {
+    "date" : "2021-05-07",
+    "close" : 130.21
+  }, {
+    "date" : "2021-05-06",
+    "close" : 129.74
+  }, {
+    "date" : "2021-05-05",
+    "close" : 128.1
+  }, {
+    "date" : "2021-05-04",
+    "close" : 127.85
+  } ]
+}
+```
+
+I had originally wondered how I was going to decode this.  it doesn't make sense to have every date in the Stock.swift class.  Since it is an array this makes it super easy.
+
+## Step 1 create a historical struct
+Note: need to be Decodable or XCode will complain it can't find initializers for the historical array.
+
+```swift
+struct historical: Decodable {
+    var date:Date
+    var closing:Double
+}
+```
+
+## Step 2 add it to the Stock.swift as an optional
+
+```swift
+var history:[historical]?
+```
+
+I haven’t had much time over the last couple of weeks to make progress.
+
+The current version solves the basic challenge but I wanted to download stock history and have that get incorporated in a stockInfo vew. Unforutately, there is something simple that I am missing that I can’t quite get the date: closingValue information out of the json and into a [Double] rather than it coming back as a dict or some other object I haven’t figured out what.
+
+Either way I got out of this what I wanted, I am going back to tutorial grinding and personal projects for a while.
+
+# Day-29-SwiftUI-and-spritekit
+
+* Jun 9, 2021
+* SpriteKit and SwiftUI
+
+
+Objective for this morning is to create the code organization for a simple SpriteKit/SwiftUI App. I am going to use the code from Paul at HWS as a starting point.
+
+* [Hacking with Swift Tutorial](https://www.hackingwithswift.com/quick-start/swiftui/how-to-integrate-spritekit-using-spriteview)
+
+There are really 2 problems that we need to address.
+
+1) How do we make a spritekit scene into a view that swiftui can use.
+2) How do we organize it so that it doesn't end up all in a single file.
+
+The first point is pretty well solved with the tutorial mentioned above and just works.
+
+## DropBoxView.swift
+
+```
+import SwiftUI
+import SpriteKit
+
+struct BoxDropView: View {
+
+    var scene: SKScene {
+            let scene = BoxDropScene()
+            scene.size = CGSize(width: 300, height: 400)
+            scene.scaleMode = .fill
+            return scene
+        }
+
+    var body: some View {
+        VStack {
+            Text("Box Drop Game")
+                .bold()
+                .scaleEffect(CGSize(width: 2.0, height: 2.0))
+
+            SpriteView(scene: scene)
+                .frame(width: 300, height: 400)
+                .ignoresSafeArea()
+        }
+
+    }
+}
+```
+
+The main points here are that we define a scene variable that is of type `SKScene`.  Inside this SKScene is an instance of the spritekit scene (`BoxDropScene`).
+
+In the tutorial, that class is in the same file but it doesn't have to be. So the code above by itself will error because we haven't defined the `BoxDropScene class`
+
+## BoxDropScene.swift
+
+This is pretty much from the tutorial example,  It makes a box that falls when you tap. I decreased the size of the boxes to make it a little more interesting and gave it a physicsBody that is just slightly larger than the box so the boxes don't actually touch.
+
+```
+import SpriteKit
+
+
+class BoxDropScene: SKScene {
+    override func didMove(to view: SKView) {
+        physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        let box = SKSpriteNode(color: SKColor.red, size: CGSize(width: 20, height: 20))
+        box.position = location
+        box.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width:22, height: 22))
+        addChild(box)
+    }
+}
+```
+
+## Folder organization
+
+* View
+  * MainScreen.swift
+  * BoxDropview.swift
+* SpriteKitScenes
+  * BoxDropScene.swift
+
+Down the road we may want the following for score data etc.
+
+* Model
+* ViewModel
+
+## MainScreen.swift
+
+For the main screen, I am using NavigationLink and NavigationView to create a text button that will redirect the user to the `BoxDropView()` which contains the `BoxDropScene` written in SpriteKit.  
+
+```
+import SwiftUI
+import SpriteKit
+
+
+
+
+struct MainScreen: View {
+    var body: some View {
+        NavigationView {
+            ScrollView {
+
+                NavigationLink(
+                    destination: BoxDropView(),
+                    label: {
+                        Text("Box Drop Game")
+                    })//NavigationLink
+
+            }//ScrollView
+        }//NavigationView
+    }//Body
+}//Struct End
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        MainScreen()
+    }
+}
+```
+
+With this template, we can now design the App in SwiftUI and wrap the SpriteKit into scenes that we can display using SwiftUI's SpriteView.  We could make any number of games a put them in a list or as cards that we can swipe through.
+
+
+
+# Day-29-SwiftUI-and-spritekit
+
+* Jun 9, 2021
+* Geometry reader
+
+Next up is can I incoporate geometryReader into the SpriteView so that it fills up the available space?
