@@ -63,7 +63,7 @@ I will be interested to see what @Chris2 recommends to code formatting in later 
 As I expected, Chris2 does say to make new lines for the modifiers in the project.  I mentioned before that this is my first exposure to SwiftUI and I find this method of
 
 ```
-modifier.modifier.modier
+modifier.modifier.modifier
 ```
 
 To be very similar to Unix command line where we pipe commands from one thing to the next.
@@ -106,7 +106,7 @@ These can be applied to Objects or Stacks.
 |.font()| Modify the font size/type| .caption, .largeTitle|
 |.padding()| White space around object|.trailing, leading, .top, .bottom|
 |.opacity()|Make an object more see through |
-|.background()| Can change the color of the background| |
+|.background()| Can change the color of the background| |M
 | .foregroundColor()| Change the color of the foreground text/object| |
 |.scaleEffect()| You can increase or decrease the size of the Object|
 |.frame() | Add a frame around an object| |
@@ -1933,3 +1933,57 @@ Can I keep users from switching after entering the game?  -- Looks like this is 
 
 
 I think if I make a game I will just decide to have it in one orientation if I am going to
+
+# Day-30-LazyStacks
+
+* iOS Foundations Module 4 Lesson 8 LazyStacks
+* Aug 1, 2021
+
+Wow so after almost 3 months of me exploring some side projects and life getting in the way (hernia surgery etc -- all good now).  I am finally getting back into the tutorials for module 4.  It is a bit challenging to start off where I left off.
+
+I had actually explored LazyStacks in one of my side projects.  I listed the alphabet and had it slide horizontally rather than vertically.  
+
+Anyway,  I am back, and will be plugging away at these tutorials again.  Super excited to see what the database and design courses have to offer.  I may skip city module and come back to it later.   
+
+The skills I really need to pick up in order to get my own ideas off the ground are
+
+* CoreData
+* CloudKit
+
+I want to also look into ResultBuilder and making my own modules that I can load for reusable code.
+
+
+# Day-31-Picker
+
+* iOS Foundations Module 4 Lesson 9 Picker
+* Aug 3, 2021
+
+I didn't realize that the scrolling wheel that many apps use and often times adds haptics too was called `Picker`
+
+```
+@State var location = 1
+
+Picker("location", selection: $location) {
+     Text("a").tag(1)
+     Text("b").tag(2)
+     Text("c").tag(3)
+}
+```
+
+I wonder if the picker can
+
+* Be shown horizontal instead of a vertical wheel.
+* Be changed in size so that more of the wheel can be shown,
+    * A diameter parameter would be neat
+
+If this is possible it would be possible to set it up like a LazyHStack but have tags that make it easier to jump to specific positions.  
+
+
+# Day-32-Portions
+
+* iOS Foundations Module 4 Lesson 10 and 11
+* Aug 6, 2021
+
+Technically, I started the challenge in lesson 9 but was having trouble staying motivated to do it.  So I looked at the answer and continued my momentum forward. Picker is quite versatile.
+
+Lesson 10 just covered how to calculate a portion for the recipe app.  Lesson 11 started the implementation.  It covered static functions in classes and also implemented a picker in the app.
