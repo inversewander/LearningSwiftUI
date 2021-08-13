@@ -1987,3 +1987,73 @@ If this is possible it would be possible to set it up like a LazyHStack but have
 Technically, I started the challenge in lesson 9 but was having trouble staying motivated to do it.  So I looked at the answer and continued my momentum forward. Picker is quite versatile.
 
 Lesson 10 just covered how to calculate a portion for the recipe app.  Lesson 11 started the implementation.  It covered static functions in classes and also implemented a picker in the app.
+
+# Day-33-Portion-Calc
+
+* iOS Foundations Module 4 Lesson 12
+* Aug 13, 2021
+
+For those that are juggling learning swift on the side while maintaining a life and a full time job.  This is your reminder, that it is ok to continue to plug away at these tutorials and your own projects in the time you find or carve out.  As you can see, I am not able to actively work on swift learning or my projects every day.  
+
+
+This lesson actually implemented the calculate the portion that was described in lesson 9/10.
+
+One nice nugget that is in this lesson is in line if statements.
+
+A variable can be reassigned depending on a conditional.
+```
+newvariable = (conditional statement) ? "than this" : "else this"
+```
+Examples
+```
+portion += wholePortions > 0 ? " " : ""
+
+portion += ingredient.num == nil && ingredient.denom == nil ? "" : " "
+```
+
+# Day-33-Featured-Details
+
+* iOS Foundations Module 4 Lesson 13
+* Aug 13, 2021
+
+
+Chris covered a lot in this lesson.  At times it seemed pretty fast and I had to pause it to get caught up.  Some of that is probably because I am coming back to this project after a lot of time and am not holding it all in my head.
+
+Some interesting tidbits:
+
+* A button can be placed around anything and a .sheet modifier can be used to tell it where to go.
+
+```
+.sheet(isPresented: $isDetailViewShowing){
+      // Show recipe Detail View
+      RecipeDetailView(recipe: model.recipes[index])
+  }
+```
+
+* When a `@State` variable needs to be updated the `init` method wont' work but the `.onAppear` method can be used.
+
+```
+.onAppear(perform: {
+            setFeaturedIndex()
+        })
+```
+
+I can see how the `.onAppear` method could also be helpful when updating other variables.
+
+A quick search revealed that there are other methods for [gestures](https://developer.apple.com/documentation/swiftui/view/ontapgesture(count:perform:) too!
+
+
+# Day-33-Custom-Fonts
+
+* iOS Foundations Module 4 Lesson 14
+* Aug 13, 2021
+
+This was a short and useful tutorial on how to add custom fonts.  
+
+[How to use custom fonts in swift](https://www.simpleswiftguide.com/how-to-use-custom-fonts-in-swift-ios-app-using-swiftui/)
+
+[System Fonts ready to use](https://developer.apple.com/fonts/system-fonts/)
+
+```
+.font(Font.custom("Avenir Heavy",size: 24))
+```
