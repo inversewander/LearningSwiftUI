@@ -2057,3 +2057,275 @@ This was a short and useful tutorial on how to add custom fonts.
 ```
 .font(Font.custom("Avenir Heavy",size: 24))
 ```
+
+Done with Module 4!  
+
+# Day-33-Core-Data
+
+* [Core Data Series](https://www.youtube.com/watch?v=6XASUd7h5-s&list=PLMRqhzcHGw1aDYKmCuqXQ_IqpWpJlpoJ3)
+* Aug 13, 2021
+
+
+## Lesson 1: Basics
+
+#### Benefits
+
+* First Party Framework
+  * will not be left behind
+  * works with other Apple APIs/frameworks
+* Not 3rd party library
+
+#### Drawbacks
+
+* Not for remote data storage
+* There is learning curve
+* Object graph persistent framework
+
+#### Graph Persistent framework
+
+Core data manages the SQL-lite database for you behind the scenes.
+
+* Object Graph in Memory
+* Managed Object Context  
+  * data management layer (handles saving loading etc)
+* Core data Persistant container
+
+#### Methods
+
+* NSManagedObject can be serialized and stored in CoreData
+* Classes are defined as Entities
+* Properties are Attributes
+
+Core data will automatically generate classes for you using a GUI.
+* the file that is labeled filename.xcdatamodeld
+  * contains the gui for setting up managed classes (Entities).
+
+
+## Lesson 2
+* Define entities and attributes
+* Generate the classes in the model
+* Get a reference to the Core Data persistent container
+* Get the managed object context
+
+#### Codegen property in the Entity Class property section (right side window)
+
+
+* Manual/None
+  * Editor->Create NSManagedObject subclass
+    * generates 2 files
+      * Filename+CoreDataClass.swift
+        * add methods in this file
+      * Filename+CoreDataProperties.swift
+        * at this time try not to add anything to this file.
+
+* Class definition
+  * No files are generated, no class extension possible. These files will only be generated in the product
+* Category/Extension
+  * if you aren't going to add anything to the second file `Filename+CoreDataProperties.swift` then let XCode just generate it in the product for you. The first file will be generated for you to edit `Filename+CoreDataClass.swift`
+
+### How to add core data after the fact
+
+1. Add new file -> CoreData (Data Model)
+  * save with the same name as your project
+2. Add Code to Persistance.swift
+  * Make sure the persistant container has the right name
+  * take code from a fresh project that you added core data from the start.
+3. add Entities and Attributes
+
+Configuring Entities:
+- [https://developer.apple.com/documenta...](https://developer.apple.com/documentation/coredata/modeling_data/configuring_entities)
+Generating Code:
+- h[ttps://developer.apple.com/documenta...](https://developer.apple.com/documentation/coredata/modeling_data/generating_code)
+Swift Int Sizes:
+- [https://www.tutlane.com/tutorial/swif...](https://www.tutlane.com/tutorial/swift/swift-data-types)
+iOS Device Architectures:
+- [https://blakespot.com/ios_device_spec...](https://blakespot.com/ios_device_specifications_grid.html)
+
+## Lesson 3
+
+* Aug 21, 2021
+* Added
+* Delete
+* Update
+* Save
+
+
+### File Prep
+
+After I started a new project with Core data it added a bunch of code that can be commented out.
+
+
+#### Persistence.swift
+
+Comment out the following blocks of code as it only applies to previews as part of the example Apple provides
+
+```
+//    static var preview: PersistenceController = {
+//        let result = PersistenceController(inMemory: true)
+//        let viewContext = result.container.viewContext
+//        for _ in 0..<10 {
+//            let newItem = Item(context: viewContext)
+//            newItem.timestamp = Date()
+//        }
+//        do {
+//            try viewContext.save()
+//        } catch {
+//            // Replace this implementation with code to handle the error appropriately.
+//            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//            let nsError = error as NSError
+//            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+//        }
+//        return result
+//    }()
+```
+
+
+```
+//        if inMemory {
+//            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+//        }
+```
+
+#### Environment variable
+
+The environment variable at the top of `ContentView.swift` sets the variable for the `managedObjectContext`.  IN our case, this variable is named viewContext. But should be placed at the top of your view hierarchy.
+
+```
+@Environment(\.managedObjectContext) private var viewContext
+```
+
+
+#### How to create a Person object
+
+```
+let p = Person(context: viewContext)
+```
+
+
+#### Fetch all Person objects and put into var people
+
+* put this near Environment variables
+
+```
+@FetchRequest(sortDescriptors: []) var people: FetchedResults<Person>
+```
+
+#### Previews in ContentView
+I was able to get the preview working by changing the `.preview` to `.shared`.
+
+```
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView().environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+    }
+}
+```
+
+
+### Save
+
+It is important that after any action (Add, Delete, Update) that the save method is called.
+
+```
+do {
+    try viewContext.save()
+} catch  {
+    // error with saving
+}
+```
+### Add
+```
+private func addItem() {
+
+    let p = Person(context: viewContext)
+    p.age = 20
+    p.name = "Joe"
+
+}
+```
+
+### Delete
+Where person is a Person objects from the array persons
+
+```
+viewContext.delete(person)
+```
+
+### Update
+You can modify the attributes in any of the objects in the array of class objects and the call save.
+
+```
+person.name = "Ted"
+```
+
+## Lesson 4 Sorting and Filtering with Core Data.
+
+* Aug 28, 2021
+* Aug 30, 2021
+* NSSortDescriptor: sorting
+* NSPredicate: Filtering
+
+
+The FetchRequest described above can be sorteded and filtered using `NSSortDescriptor` and `NSPredicate`
+
+* sortDescriptors: [NSSortDescriptor(key: "age", ascending: true)] is an array so you can add more than 1 NSSortDescriptor
+*  predicate: NSPredicate(format: "age > 9 && age < 16")) can be used to filter based on attributes in the core data.
+* var people is where you are setting the fetch request.
+
+
+If you have set filters you want to apply to data with no user input you can put those filters/sorts directly in the fetch request as follows.
+
+```
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "age", ascending: true)], predicate: NSPredicate(format: "age > 9 && age < 16")) var people: FetchedResults<Person>
+```
+
+
+More often however, we want to be able to give the user the ability to sort and filter. In order to do this we need to create some `@State` variables and update those State variables using `.onchange` modifiers associated with `Text` or `Stacks`.
+
+```
+@State var people = [Person]()
+@State var filterByText = ""
+
+
+
+
+VStack {
+  // Textfield for filter
+  TextField("Filter Text", text: $filterByText) { _ in
+      // Fetch new data
+      // Gets activated upon mouse insertion into text field and upon enter
+      //fetchData()
+  } // List of people you fetched
+  List {
+               ForEach(people) { person in
+               }
+
+
+  }
+  .onChange(of: filterByText, perform: { value in
+    fetchData()
+  })
+
+} // End of VStack
+
+func fetchData() {
+    //Create fetch request
+    let request = Person.pfetchRequest()
+    //Set  sort descriptors and predicates
+    request.sortDescriptors = [NSSortDescriptor(key: "age", ascending: true)]
+    // Don't need single quotes for %@
+    request.predicate = NSPredicate(format: "name contains %@", filterByText)
+    //Execute the fetch on the main thread so it updates right away
+    DispatchQueue.main.async {
+        do {
+
+            let results = try viewContext.fetch(request)
+            // Update the state property
+            self.people = results
+        } catch {
+
+        }
+    }
+
+}
+```
