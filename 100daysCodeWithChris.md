@@ -2060,7 +2060,7 @@ This was a short and useful tutorial on how to add custom fonts.
 
 Done with Module 4!  
 
-# Day-33-Core-Data
+# Day-34-35-36-37-Core-Data
 
 * [Core Data Series](https://www.youtube.com/watch?v=6XASUd7h5-s&list=PLMRqhzcHGw1aDYKmCuqXQ_IqpWpJlpoJ3)
 * Aug 13, 2021
@@ -2261,7 +2261,6 @@ person.name = "Ted"
 ## Lesson 4 Sorting and Filtering with Core Data.
 
 * Aug 28, 2021
-* Aug 30, 2021
 * NSSortDescriptor: sorting
 * NSPredicate: Filtering
 
