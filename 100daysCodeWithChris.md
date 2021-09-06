@@ -2265,7 +2265,7 @@ person.name = "Ted"
 * NSPredicate: Filtering
 
 
-The FetchRequest described above can be sorteded and filtered using `NSSortDescriptor` and `NSPredicate`
+The FetchRequest described above can be sorted and filtered using `NSSortDescriptor` and `NSPredicate`
 
 * sortDescriptors: [NSSortDescriptor(key: "age", ascending: true)] is an array so you can add more than 1 NSSortDescriptor
 *  predicate: NSPredicate(format: "age > 9 && age < 16")) can be used to filter based on attributes in the core data.
@@ -2328,3 +2328,47 @@ func fetchData() {
 
 }
 ```
+
+# Day-38-Core-Data
+
+* Sep 6, 2021
+* entities and relationships
+
+Relationships can be set between entities in your core model.
+
+* Person Entity
+* Family Entity
+
+A family entity can contain several person entities. These kinds of relationships are identical to tables in a database (https://vladmihalcea.com/database-table-relationships/) with `one to one`, `one to many` and `many to many` relationship possibilities.
+
+Apple recommends that for the integrity of the object graph then when making a relationship is to create the inverse relationship.
+
+So basically, Core Data can be viewed as Apples library for creating database tables and providing all the functions inherent with using databases to save, delete, update, filter and sort data.  The tables in the database are the entities and setting up entities well will result in a more efficient utilization and exploration of your data.
+
+Examples:
+
+#### Person
+
+* Country
+* Person
+* Family
+
+#### Post
+
+* Post
+* post_content
+
+
+#### Products/stores
+
+* https://www.sqlservertutorial.net/sql-server-sample-database/
+
+* customers
+* orders
+* staffs
+* stores
+* order items
+* categories
+* products
+* stocks
+* brands
