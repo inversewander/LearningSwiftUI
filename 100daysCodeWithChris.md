@@ -2372,3 +2372,19 @@ Examples:
 * products
 * stocks
 * brands
+
+# Day-39-Core-DataService
+
+* Sep 25, 2021
+
+Spent some time working on implementing Core data on one of my projects and here is what I learned.
+
+When setting relationships, It is easier to think of them as setting an attribute with an object type and the inverse is the corresponding attribute defined in Object type.  Choose `to one` if it is not an array and `to many` if it is an array.
+
+| Relationship | Destination | Inverse | Too One/Many |
+| -- | -- | -- | -- |
+| Attribute | Object Type | Attribute in Object Type | single/Array |
+
+When done
+
+Editor > createNSmanaged
